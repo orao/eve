@@ -16,8 +16,9 @@
 #include <eve/detail/function/lookup.hpp>
 #include <eve/detail/function/slice.hpp>
 #include <eve/detail/function/subscript.hpp>
-#include <eve/traits/element_type.hpp>
+#include <eve/detail/function/swizzle.hpp>
 #include <eve/detail/spy.hpp>
+#include <eve/traits/element_type.hpp>
 
 #if defined(SPY_COMPILER_IS_GCC)
 #pragma GCC diagnostic push
@@ -121,6 +122,14 @@ namespace eve::detail
 
     EVE_FORCEINLINE auto back()  const noexcept { return (*this)[cardinal_v<Derived>-1]; }
     EVE_FORCEINLINE auto front() const noexcept { return (*this)[0]; }
+
+    //==============================================================================================
+    // Swizzle interface
+    template<typename Pattern, int PSize>
+    EVE_FORCEINLINE auto operator[](swizzler_t<Pattern,PSize> p) const noexcept
+    {
+      return detail::swizzle(EVE_CURRENT_API{}, *this, p);
+    }
 
     //==============================================================================================
     // Common hidden friend operators
