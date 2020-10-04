@@ -17,7 +17,7 @@
 
 # Rationale
 
-This sections explains some our implementation choice.
+This sections explains some of our implementation choices.
 
   - [SIMD registers as Type x Cardinal](#rationale/simdregistersastypexcardinal)
   - [Function Objects as API](#rationale/functionobjectsasapi)
@@ -32,7 +32,7 @@ define a SIMD type by specifying:
   - Only the base type: `eve::wide<float>`. In this case, the best cardinal for the current architecture
     will be selected and will ensure optimal performance for the user.
 
-  - The base type and cardinal: `eve::wide<float, eve::fixed<8>>`. This interface is more geared
+  - The base type and cardinal: `eve::wide<float,eve::fixed<8>>`. This interface is more geared
     toward power users that may requires a specific cardinal for their algorithm on any architecture.
     In this case, **EVE** will take care of ensuring the semantic of such code is correct over any
     architecture.
@@ -61,13 +61,13 @@ have been implemented as functions in additional namespaces or functions with di
 
 We decided against those options because:
 
-  - extra namespaces may have required code duplication when combining multiple decorator or decorator
+  - extra namespaces may have required code duplication when combining multiple decorators or decorator
     and masking.
 
   - extra function names would have cluttered the API.
 
 The use of callable object to modify another callable object also plays nicely with a purely
-functional view of the library in which everything is a value, including function.
+functional view of the library in which everything is a value, including functions.
 
 ## Masked operations support
 Some SIMD instruction sets provides intrinsics that can mask which lanes of the register are
@@ -75,7 +75,7 @@ affected by the operations. Those so-called **Masked operations** are accessible
 following protocol:
 
   - Let `func` be an **EVE** object function object that supports masks and let `cond`
-    be a :ref:`Logical Value`.
+    be a  [logical value](../../concepts.html#value).
 
   - Then, for any [value](../concepts.html#value) `x`, the expression `func[cond](x, ...)`
     is equivalent to `if_else(cond, func_(x,...), x)`.
