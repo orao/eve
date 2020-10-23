@@ -15,6 +15,25 @@
 
 namespace eve
 {
+  struct regular_type;
+
+  namespace detail
+  {
+    //================================================================================================
+    // Internal regular wrapper as we need to be able to discriminate regular-wrapped callable
+    template<typename Callable>
+    struct regular_
+    {
+      using semantic_type = regular_type;
+      using callable_type = Callable;
+      template<typename... Args> auto operator()(Args&&... args) const
+      {
+        return func(std::forward<Args>(args)...);
+      }
+      Callable func;
+    };
+  }
+
   //================================================================================================
   // Function decorators mark-up used in function overloads
   struct regular_type : decorator_
@@ -22,10 +41,7 @@ namespace eve
     template<typename Function>
     constexpr EVE_FORCEINLINE auto operator()(Function f) const noexcept
     {
-      return  [f](auto&&... args)
-              {
-                return f(std::forward<decltype(args)>(args)...);
-              };
+      return  detail::regular_<Function>{f};
     }
   };
 
@@ -33,4 +49,3 @@ namespace eve
   // Function decorator - regular mode
   inline constexpr regular_type const regular = {};
 }
-

@@ -13,9 +13,6 @@
 #include <eve/concept/value.hpp>
 #include <eve/constant/ieee_constant.hpp>
 #include <eve/constant/inf.hpp>
-#include <eve/constant/maxlog.hpp>
-#include <eve/constant/minlog.hpp>
-#include <eve/constant/minlogdenormal.hpp>
 #include <eve/constant/zero.hpp>
 #include <eve/detail/abi.hpp>
 #include <eve/detail/apply_over.hpp>
@@ -45,24 +42,14 @@ namespace eve::detail
     if constexpr( has_native_abi_v<T> )
     {
       using elt_t       = element_type_t<T>;
-      auto minlogval = [](){
-        if constexpr((!eve::platform::supports_denormals) || std::is_same_v<D,regular_type> )
-        {
-          return  minlog(eve::as<T>());
-        }
-        else
-        {
-          return minlogdenormal(eve::as<T>());
-        }
-      };
       const T Log_2hi   = Ieee_constant<T, 0x3f318000U, 0x3fe62e42fee00000ULL>();
       const T Log_2lo   = Ieee_constant<T, 0xb95e8083U, 0x3dea39ef35793c76ULL>();
       const T Invlog_2  = Ieee_constant<T, 0x3fb8aa3bU, 0x3ff71547652b82feULL>();
-      auto    xltminlog = x <= minlogval();
-      auto    xgemaxlog = x >= maxlog(eve::as(x));
+      auto    xltminlog = x < eve::range_min<T>(D()(eve::exp));
+      auto    xgtmaxlog = x > eve::range_max<T>(eve::exp);
       if constexpr( scalar_value<T> )
       {
-        if( xgemaxlog ) return inf(eve::as(x));
+        if( xgtmaxlog ) return inf(eve::as(x));
         if( xltminlog ) return zero(eve::as(x));
       }
       auto c = nearest(Invlog_2 * x);
@@ -94,7 +81,7 @@ namespace eve::detail
       if constexpr( simd_value<T> )
       {
         z = if_else(xltminlog, eve::zero, z);
-        z = if_else(xgemaxlog, inf(eve::as(x)), z);
+        z = if_else(xgtmaxlog, inf(eve::as(x)), z);
       }
       return z;
     }
