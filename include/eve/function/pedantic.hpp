@@ -15,13 +15,17 @@
 
 namespace eve
 {
+  struct pedantic_type;
+
   namespace detail
   {
     //================================================================================================
-    // Internal raw wrapper as we need to be able to discriminate numeric-wrapped callable
+    // Internal raw wrapper as we need to be able to discriminate pedantic-wrapped callable
     template<typename Callable>
     struct pedantic_
     {
+      using semantic_type = pedantic_type;
+      using callable_type = Callable;
       template<typename... Args> auto operator()(Args&&... args) const;
       Callable func;
     };

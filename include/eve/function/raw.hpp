@@ -15,6 +15,8 @@
 
 namespace eve
 {
+  struct raw_type;
+
   namespace detail
   {
     //================================================================================================
@@ -22,6 +24,8 @@ namespace eve
     template<typename Callable>
     struct raw_
     {
+      using semantic_type = raw_type;
+      using callable_type = Callable;
       template<typename... Args> auto operator()(Args&&... args) const;
       Callable func;
     };

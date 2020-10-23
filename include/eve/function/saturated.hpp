@@ -15,6 +15,8 @@
 
 namespace eve
 {
+  struct saturated_type;
+
   namespace detail
   {
     //================================================================================================
@@ -22,6 +24,8 @@ namespace eve
     template<typename Callable>
     struct saturated_
     {
+      using semantic_type = saturated_type;
+      using callable_type = Callable;
       template<typename... Args> auto operator()(Args&&... args) const;
       Callable func;
     };
