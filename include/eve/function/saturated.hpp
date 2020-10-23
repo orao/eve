@@ -15,6 +15,18 @@
 
 namespace eve
 {
+  namespace detail
+  {
+    //================================================================================================
+    // Internal raw wrapper as we need to be able to discriminate saturated-wrapped callable
+    template<typename Callable>
+    struct saturated_
+    {
+      template<typename... Args> auto operator()(Args&&... args) const;
+      Callable func;
+    };
+  }
+
   //================================================================================================
   // Function decorators mark-up used in function overloads
   struct saturated_type : decorator_
@@ -22,15 +34,23 @@ namespace eve
     template<typename Function>
     constexpr EVE_FORCEINLINE auto operator()(Function f) const noexcept
     {
-      return  [f](auto&&... args)
-              {
-                return f(saturated_type{}, std::forward<decltype(args)>(args)...);
-              };
+      return  detail::saturated_{f};
     }
   };
 
   //================================================================================================
   // Function decorator - saturated mode
   inline constexpr saturated_type const saturated = {};
+
+  //================================================================================================
+  // Wrapper implementation
+  namespace detail
+  {
+    template<typename Callable>
+    template<typename... Args> auto saturated_<Callable>::operator()(Args&&... args) const
+    {
+      return func(saturated_type{}, std::forward<Args>(args)...);
+    }
+  }
 }
 
