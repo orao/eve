@@ -27,6 +27,9 @@ namespace eve
     // range-min extension point
     template<typename T> inline constexpr auto range_min =  std::numeric_limits<T>::lowest();
 
+    template<typename Tag, typename T0, typename... T>
+    inline constexpr auto range_min<Tag(T0,T...)> = range_min<T0>;
+
     template<typename Tag, typename X, typename T0, typename... T>
     inline constexpr auto range_min<callable_object<Tag,X>(T0,T...)>
                         = range_min<Tag(T0,T...)>;
@@ -38,6 +41,9 @@ namespace eve
 
     // range-max extension point
     template<typename T> inline constexpr auto range_max = std::numeric_limits<T>::max();
+
+    template<typename Tag, typename T0, typename... T>
+    inline constexpr auto range_max<Tag(T0,T...)> = range_max<T0>;
 
     template<typename Tag, typename X, typename T0, typename... T>
     inline constexpr auto range_max<callable_object<Tag,X>(T0,T...)>
