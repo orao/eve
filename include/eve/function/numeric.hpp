@@ -38,7 +38,7 @@ namespace eve
     template<typename Function>
     constexpr EVE_FORCEINLINE auto operator()(Function f) const noexcept
     {
-      return  detail::numeric_{f};
+      return  detail::numeric_<Function>{f};
     }
   };
 
