@@ -12,10 +12,17 @@
 
 #include <eve/arch.hpp>
 #include <eve/detail/overload.hpp>
+#include <eve/function/properties.hpp>
 
 namespace eve
 {
   EVE_MAKE_CALLABLE(abs_, abs);
+
+  namespace detail
+  {
+    template<>
+    inline constexpr auto supports_saturated<tag::abs_> = true;
+  }
 }
 
 #include <eve/module/core/function/generic/abs.hpp>

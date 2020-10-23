@@ -20,6 +20,12 @@
 
 #include <cmath>
 
+TTS_CASE_TPL("Check eve::exp return properties", EVE_TYPE)
+{
+  TTS_EQUAL( eve::range_min<T>(eve::exp), 0);
+  TTS_EQUAL( eve::range_max<T>(eve::exp), 0);
+}
+
 TTS_CASE_TPL("Check eve::exp return type", EVE_TYPE)
 {
   TTS_EXPR_IS(eve::exp(T(0)), T);

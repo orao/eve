@@ -13,6 +13,12 @@
 #include <eve/constant/valmax.hpp>
 #include <type_traits>
 
+TTS_CASE( "Check eve::saturated(eve::abs) properties" )
+{
+  TTS_EXPECT( eve::supports_saturated(eve::abs) );
+  TTS_EXPECT_NOT( eve::supports_saturated(eve::saturated(eve::abs)) );
+}
+
 TTS_CASE_TPL("Check abs return type", EVE_TYPE)
 {
   TTS_EXPR_IS(eve::saturated(eve::abs)(T()), T);
