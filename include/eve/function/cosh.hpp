@@ -25,4 +25,5 @@ namespace eve
   }
 }
 
-#include <eve/module/math/function/generic/cosh.hpp>
+#include <eve/module/math/function/generic/cosh.hpp> unit/unit.math.sinh.regular.simd.exe
+
