@@ -22,45 +22,26 @@ namespace eve
 
   namespace detail
   {
-    template<typename T>
-    inline constexpr T range_min<tag::exp_(T)> =
-    []()
-    {
-      if constexpr(std::same_as<T,float>) return -0x1.5d814ap+6f;       //  -87.376259f;
-      else                                return -0x1.6232bdd7abc97p+9; // -708.39641853226420;
-    }();
+    // range_max
+    template<> inline constexpr auto range_max<tag::exp_(float)>  =  0x1.61814ap+6f;       //  88.376259f;
+    template<> inline constexpr auto range_max<tag::exp_(double)> =  0x1.62b7d369a5aa7p+9; // 709.43613930310391;
 
-    template<typename T>
-    inline constexpr T range_min<tag::exp_(regular_type, T)> = range_min<tag::exp_(T)>;
+    template<typename T> inline constexpr T range_max<tag::exp_(pedantic_type, T)> = range_max<tag::exp_(T)>;
 
-    template<typename T>
-    inline constexpr T range_min<tag::exp_(pedantic_type, T)> =
-    []()
-    {
-      if constexpr(eve::platform::supports_denormals)
-      {
-        if constexpr(std::same_as<T,float>) return -0x1.9fe368p+6f;        // -103.972084f;
-        else                                return -0x1.74910d52d3051p+9; // -745.1332191019413358;
-      }
-      else
-      {
-        return range_min<tag::exp_(T)>;
-      }
-    }();
+    // range_min
+    template<> inline constexpr auto range_min<tag::exp_(float)>  = -0x1.5d814ap+6f;       //  -87.376259f;
+    template<> inline constexpr auto range_min<tag::exp_(double)> = -0x1.6232bdd7abc97p+9; // -708.39641853226420;
 
-    template<typename T>
-    inline constexpr T range_max<tag::exp_(T)> =
-    []()
-    {
-      if constexpr(std::same_as<T,float>) return 0x1.61814ap+6f;       //  88.376259f;
-      else                                return 0x1.62b7d369a5aa7p+9; // 709.43613930310391;
-    }();
+    template<> inline constexpr auto range_min<tag::exp_(pedantic_type, float)> =
+      platform::supports_denormals ? -0x1.9fe368p+6f        // -103.972084f;
+                                   : range_min<tag::exp_(float)>;
 
-    template<typename T>
-    inline constexpr T range_max<tag::exp_(pedantic_type, T)> = range_max<tag::exp_(T)>;
+    template<> inline constexpr auto range_min<tag::exp_(pedantic_type, double)> =
+      platform::supports_denormals ? -0x1.74910d52d3051p+9 // -745.1332191019413358
+                                   : range_min<tag::exp_(double)>;
 
-    template<>
-    inline constexpr auto supports_pedantic<tag::exp_> = true;
+    template<> inline constexpr auto supports_pedantic<tag::exp_> = true;
+    template<typename T> inline constexpr T range_min<tag::exp_(regular_type, T)> = range_min<tag::exp_(T)>;
   }
 }
 

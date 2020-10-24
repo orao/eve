@@ -10,6 +10,8 @@
 //==================================================================================================
 #include <eve/function/acos.hpp>
 #include <eve/function/is_positive.hpp>
+#include <eve/function/prev.hpp>
+#include <eve/function/next.hpp>
 #include <eve/function/raw.hpp>
 #include <eve/function/all.hpp>
 #include <eve/constant/nan.hpp>
@@ -18,6 +20,19 @@
 #include <eve/platform.hpp>
 
 #include <cmath>
+
+
+TTS_CASE_TPL("Check eve::exp properties", EVE_TYPE)
+{
+  {
+    auto reg = eve::raw(eve::acos);
+    using v_t = eve::element_type_t<T>;
+    TTS_ULP_EQUAL (reg(eve::prev(eve::range_min<T>(reg))), eve::nan(eve::as<v_t>()), 0.5);
+    TTS_ULP_EQUAL (reg(eve::range_min<T>(reg)), std::acos(eve::range_min<v_t>(reg)), 0.5);
+    TTS_ULP_EQUAL (reg(eve::next(eve::range_max<T>(reg))), eve::nan(eve::as<v_t>()), 0.5);
+    TTS_ULP_EQUAL (reg(eve::range_max<T>(reg)), std::acos(eve::range_max<v_t>(reg)), 0.5);
+  }
+}
 
 TTS_CASE_TPL("Check acos return type", EVE_TYPE)
 {
@@ -55,5 +70,6 @@ TTS_CASE_TPL("Check raw(eve::acos) behavior", EVE_TYPE)
   TTS_ULP_EQUAL(raw(eve::acos)(T(9.999927878e-01)), T(std::acos(v_t(9.999927878e-01))), 234 );
   TTS_ULP_EQUAL(raw(eve::acos)(T(9.999984503e-01)), T(std::acos(v_t(9.999984503e-01))), 361.5);
   TTS_ULP_EQUAL(raw(eve::acos)(T(9.999996424e-01)), T(std::acos(v_t(9.999996424e-01))), 867.5);
-  TTS_ULP_EQUAL(raw(eve::acos)(T(9.999999404e-01)), T(std::acos(v_t(9.999999404e-01))), 1643.5);
-}
+  TTS_ULP_EQUAL(raw(eve::acos)(T(9.999999404e-01)), T(std::acos(v_t(9.999999404e-01))), 1000.0);
+  TTS_ULP_EQUAL(raw(eve::acos)(T(eve::prev(T(1)))),  T(std::acos(eve::prev(v_t(1)))), 640.);
+                }

@@ -11,12 +11,26 @@
 #include <eve/function/acos.hpp>
 #include <eve/function/is_positive.hpp>
 #include <eve/function/all.hpp>
+#include <eve/function/next.hpp>
+#include <eve/function/prev.hpp>
 #include <eve/constant/nan.hpp>
 #include <eve/constant/pio_2.hpp>
 #include <eve/constant/pi.hpp>
 #include <eve/platform.hpp>
 
 #include <cmath>
+
+TTS_CASE_TPL("Check eve::acos properties", EVE_TYPE)
+{
+  {
+    auto reg = eve::acos;
+    using v_t = eve::element_type_t<T>;
+    TTS_ULP_EQUAL (reg(eve::prev(eve::range_min<T>(reg))), eve::nan(eve::as<v_t>()), 0.5);
+    TTS_ULP_EQUAL (reg(eve::range_min<T>(reg)), std::acos(eve::range_min<v_t>(reg)), 0.5);
+    TTS_ULP_EQUAL (reg(eve::next(eve::range_max<T>(reg))), eve::nan(eve::as<v_t>()), 0.5);
+    TTS_ULP_EQUAL (reg(eve::range_max<T>(reg)), std::acos(eve::range_max<v_t>(reg)), 0.5);
+  }
+}
 
 TTS_CASE_TPL("Check acos return type", EVE_TYPE)
 {

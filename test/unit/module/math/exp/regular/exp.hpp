@@ -20,34 +20,15 @@
 
 #include <cmath>
 
-TTS_CASE_TPL("Check eve::exp return properties", EVE_TYPE)
+TTS_CASE_TPL("Check eve::exp properties", EVE_TYPE)
 {
   {
     auto reg = eve::exp;
     using v_t = eve::element_type_t<T>;
     TTS_ULP_EQUAL (reg(eve::prev(eve::range_min<T>(reg))), v_t(0), 0.5);
     TTS_ULP_EQUAL (reg(eve::range_min<T>(reg)), std::exp(eve::range_min<v_t>(reg)), 0.5);
-  }
-  {
-    auto ped = eve::pedantic(eve::exp);
-    using v_t = eve::element_type_t<T>;
-    TTS_ULP_EQUAL (ped(eve::prev(eve::range_min<T>(ped))), v_t(0), 0.5);
-    TTS_ULP_EQUAL (ped(eve::range_min<T>(ped)), std::exp(eve::range_min<v_t>(ped)), 0.5);
-  }
-
-  {
-    auto ped = eve::pedantic(eve::exp);
-    using v_t = eve::element_type_t<T>;
-    TTS_ULP_EQUAL (ped(eve::next(eve::range_max<T>(ped))), eve::inf(eve::as<v_t>()), 0.5);
-    TTS_ULP_EQUAL (ped(eve::range_max<T>(ped)), std::exp(eve::range_max<v_t>(ped)), 0.5);
-//     std::cout << "prev " << std::hexfloat << eve::prev(eve::range_max<T>(ped), 100) <<  " -> " << std::defaultfloat << ped(eve::prev(eve::range_max<T>(ped), 100)) << std::endl;
-//     std::cout << "prev " << std::hexfloat << eve::prev(eve::range_max<T>(ped), 2) <<  " -> " << std::defaultfloat << ped(eve::prev(eve::range_max<T>(ped), 2)) << std::endl;
-//     std::cout << "prev " << std::hexfloat << eve::prev(eve::range_max<T>(ped)) <<  " -> " << std::defaultfloat << ped(eve::prev(eve::range_max<T>(ped))) << std::endl;
-//     std::cout << "val  " << std::hexfloat << eve::range_max<T>(ped) <<  " -> " << std::defaultfloat << ped(eve::range_max<T>(ped)) << " <- " << eve::range_max<T>(ped) << std::endl;
-//     std::cout << "next " << std::hexfloat << eve::next(eve::range_max<T>(ped)) <<  " -> " << std::defaultfloat << ped(eve::next(eve::range_max<T>(ped))) << std::endl;
-//     std::cout << "next " << std::hexfloat << eve::next(eve::range_max<T>(ped), 2) <<  " -> " << std::defaultfloat << ped(eve::next(eve::range_max<T>(ped), 2)) << std::endl;
-//     std::cout << "next " << std::hexfloat << eve::next(eve::range_max<T>(ped), 3) <<  " -> " << std::defaultfloat << ped(eve::next(eve::range_max<T>(ped), 3)) << std::endl;
-//     std::cout << "next " << std::hexfloat << eve::next(eve::range_max<T>(ped), 100) <<  " -> " << std::defaultfloat << ped(eve::next(eve::range_max<T>(ped), 30)) << std::endl;
+    TTS_ULP_EQUAL (reg(eve::next(eve::range_max<T>(reg))), eve::inf(eve::as<v_t>()), 0.5);
+    TTS_ULP_EQUAL (reg(eve::range_max<T>(reg)), std::exp(eve::range_max<v_t>(reg)), 0.5);
   }
 }
 
