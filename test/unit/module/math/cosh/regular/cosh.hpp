@@ -9,11 +9,48 @@
 **/
 //==================================================================================================
 #include <eve/function/cosh.hpp>
+#include <eve/function/prev.hpp>
+#include <eve/function/next.hpp>
+#include <eve/function/is_finite.hpp>
 #include <eve/constant/nan.hpp>
 #include <eve/constant/inf.hpp>
 #include <eve/constant/minf.hpp>
 #include <eve/platform.hpp>
 
+TTS_CASE_TPL("Check eve::exp properties", EVE_TYPE)
+{
+  {
+    auto reg = eve::cosh;
+    using v_t = eve::element_type_t<T>;
+    TTS_ULP_EQUAL (reg(eve::prev(eve::range_min<T>(reg))), eve::inf(eve::as<v_t>()), 0.5);
+    TTS_ULP_EQUAL (reg(eve::range_min<T>(reg)), std::cosh(eve::range_min<v_t>(reg)), 0.5);
+    TTS_ULP_EQUAL (reg(eve::next(eve::range_max<T>(reg))), eve::inf(eve::as<v_t>()), 0.5);
+    TTS_ULP_EQUAL (reg(eve::range_max<T>(reg)), std::cosh(eve::range_max<v_t>(reg)), 0.5);
+
+    auto vmax = eve::range_min<T>(reg)*v_t(0.9);
+    auto vmin = eve::range_min<T>(reg)*v_t(1.1);
+    if(eve::is_finite(reg(vmax)) && !eve::is_finite(reg(vmin)))
+    {
+      while(true)
+      {
+        auto v =  eve::average(vmin, vmax);
+        if (eve::is_finite(reg(v))) vmax = v;  else vmin = v;
+//         std::cout << "vmin " << vmin <<  std::endl;
+//         std::cout << "vmax " << vmax <<  std::endl;
+//         std::cout << "vmax > vmin   " << (vmax > vmin) <<  std::endl;
+        if(vmin >=   eve::prev(vmax))
+        {
+          std::cout << std::hexfloat << eve::next(v) << " -> " << reg(eve::next(v)) << " -> " << std::defaultfloat << std::setprecision(16) << eve::next(v) << std::endl;
+          std::cout << std::hexfloat << v << " -> " << reg(v) << std::endl;
+          std::cout << std::hexfloat << eve::prev(v) << " -> " << reg(eve::prev(v)) << " -> " << std::defaultfloat << std::setprecision(16) << eve::next(v) << std::endl;
+          break;
+        }
+      }
+    }
+    else
+      std::cout << "zut" << std::endl;
+  }
+}
 
 TTS_CASE_TPL("Check eve::cosh return type", EVE_TYPE)
 {
@@ -29,21 +66,10 @@ TTS_CASE_TPL("Check eve::eve::cosh behavior", EVE_TYPE)
     TTS_IEEE_EQUAL(eve::cosh(eve::minf(eve::as<T>())), (eve::inf(eve::as<T>())) );
   }
 
+  TTS_ULP_EQUAL(eve::cosh(T(0.5)), T(std::cosh(0.5)), 0.5);
+  TTS_ULP_EQUAL(eve::cosh(T(-0.5)),T(std::cosh(-0.5)), 0.5);
   TTS_ULP_EQUAL(eve::cosh(T(1)), T(std::cosh(1.0)), 0.5);
   TTS_ULP_EQUAL(eve::cosh(T(-1)),T(std::cosh(-1.0)), 0.5);
-
-  using v_t = eve::element_type_t<T>;
-
-  v_t ovl =  eve::Ieee_constant<v_t,0x42B0C0A4U, 0x40862E42FEFA39EFULL>(); // 88.376251220703125f, 709.782712893384
-  v_t a[] = { v_t(1), v_t(-1), v_t(0), v_t(-0.0), v_t(10), v_t(-10), eve::maxlog(eve::as<v_t>())
-            , ovl/2, ovl, 2*ovl, -eve::maxlog(eve::as<v_t>()), -ovl/2, -ovl, -2*ovl
-            };
-
-  for(auto v : a)
-  {
-    auto  res = eve::cosh(T(v));
-    v_t   ref = std::cosh(double(v));
-
-    TTS_ULP_EQUAL(res, (T(ref)), 0.5);
-  }
+  TTS_ULP_EQUAL(eve::cosh(T(2)), T(std::cosh(2.0)), 0.5);
+  TTS_ULP_EQUAL(eve::cosh(T(-2)),T(std::cosh(-2.0)), 0.5);
 }

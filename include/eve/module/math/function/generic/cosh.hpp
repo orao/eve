@@ -36,7 +36,7 @@ namespace eve::detail
     // respectively computed
     // *  in the first case cosh (e+rec(e))/2
     // *  in the second     cosh is (e/2)*e (avoiding undue overflow)
-    // Threshold is maxlog - Log_2
+    // threshold is maxlog - Log_2
     //////////////////////////////////////////////////////////////////////////////
     if constexpr(scalar_value<T>)
     {
@@ -56,7 +56,7 @@ namespace eve::detail
           return t;
         }
         auto t = exp(x);
-        return (x > T(22.0f)) ? t*half(eve::as<T>()) : average(t, rec(t));
+        return (x > T(22)) ? t*half(eve::as<T>()) : average(t, rec(t));
       }
       else
       {
