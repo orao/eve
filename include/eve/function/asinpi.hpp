@@ -15,6 +15,12 @@
 namespace eve
 {
   EVE_MAKE_CALLABLE(asinpi_, asinpi);
+
+  namespace detail
+  {
+    template<typename T> inline constexpr auto range_max<tag::asinpi_(T)> = T(1);
+    template<typename T> inline constexpr auto range_min<tag::asinpi_(T)> = T(-1);
+  }
 }
 
 #include <eve/module/math/function/generic/asinpi.hpp>

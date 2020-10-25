@@ -10,6 +10,8 @@
 //==================================================================================================
 #include <eve/function/expm1.hpp>
 #include <eve/function/all.hpp>
+#include <eve/function/next.hpp>
+#include <eve/function/prev.hpp>
 #include <eve/constant/nan.hpp>
 #include <eve/constant/inf.hpp>
 #include <eve/constant/minf.hpp>
@@ -18,6 +20,20 @@
 #include <eve/platform.hpp>
 
 #include <cmath>
+
+TTS_CASE_TPL("Check eve::exp properties", EVE_TYPE)
+{
+  {
+    auto reg = (eve::expm1);
+    using v_t = eve::element_type_t<T>;
+
+    TTS_ULP_EQUAL (reg(eve::range_min<T>(reg)), std::expm1(eve::range_min<v_t>(reg)), 1);
+    TTS_ULP_EQUAL (reg(eve::prev(eve::range_min<T>(reg))), v_t(-1), 0.5);
+    TTS_EXPECT(reg(eve::range_min<T>(reg)) >  v_t(-1));
+    TTS_ULP_EQUAL (reg(eve::next(eve::range_max<T>(reg))), eve::inf(eve::as<v_t>()), 0.5);
+    TTS_ULP_EQUAL (reg(eve::range_max<T>(reg)), std::expm1(eve::range_max<v_t>(reg)), 0.5);
+  }
+}
 
 TTS_CASE_TPL("Check eve::expm1 return type", EVE_TYPE)
 {

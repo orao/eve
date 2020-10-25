@@ -15,6 +15,12 @@
 namespace eve
 {
   EVE_MAKE_CALLABLE(asin_, asin);
+
+  namespace detail
+  {
+    template<typename T> inline constexpr auto range_max<tag::asin_(T)> = T(1);
+    template<typename T> inline constexpr auto range_min<tag::asin_(T)> = T(-1);
+  }
 }
 
 #include <eve/module/math/function/generic/asin.hpp>

@@ -15,6 +15,10 @@
 namespace eve
 {
   EVE_MAKE_CALLABLE(factorial_, factorial);
+  namespace detail
+  {
+    template<typename T> inline constexpr auto range_max<tag::factorial_(T)> = T(171);
+  }
 }
 
 #include <eve/module/combinatorial/function/generic/factorial.hpp>

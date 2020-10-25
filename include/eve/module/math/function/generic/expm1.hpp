@@ -22,6 +22,7 @@
 #include <eve/detail/apply_over.hpp>
 #include <eve/detail/implementation.hpp>
 #include <eve/detail/meta.hpp>
+#include <eve/function/exp.hpp>
 #include <eve/function/fms.hpp>
 #include <eve/function/fnma.hpp>
 #include <eve/function/inc.hpp>
@@ -34,7 +35,7 @@
 #include <eve/function/regular.hpp>
 #include <eve/function/sqr.hpp>
 #include <eve/module/core/detail/generic/horn.hpp>
-
+#include <typeinfo>
 namespace eve::detail
 {
   template<floating_real_value T, decorator D>
@@ -49,16 +50,13 @@ namespace eve::detail
       const T Log_2lo   = Ieee_constant<T, 0xb95e8083U, 0x3dea39ef35793c76ULL>();
       const T Invlog_2  = Ieee_constant<T, 0x3fb8aa3bU, 0x3ff71547652b82feULL>();
       T       k         = nearest(Invlog_2 * xx);
-      auto    xlelogeps = xx <= logeps(eve::as(xx));
-      auto    xgemaxlog = xx >= maxlog(eve::as(xx));
+      auto    xltminrange = xx < eve::range_min<T>(eve::expm1);
+      auto    xgtmaxrange = xx > eve::range_max<T>(eve::expm1);
       if constexpr( scalar_value<T> )
       {
-        if( is_eqz(xx) )
-          return xx;
-        if( xgemaxlog )
-          return inf(eve::as<T>());
-        if( xlelogeps )
-          return mone(eve::as<T>());
+        if( is_eqz(xx) )  return xx;
+        if( xgtmaxrange ) return inf(eve::as<T>());
+        if( xltminrange ) return mone(eve::as<T>());
       }
       if constexpr( std::is_same_v<elt_t, float> )
       {
@@ -101,9 +99,9 @@ namespace eve::detail
       }
       if constexpr( simd_value<T> )
       {
-        k = if_else(xgemaxlog, inf(eve::as<T>()), k);
+        k = if_else(xgtmaxrange, inf(eve::as<T>()), k);
         k = if_else(is_eqz(xx), xx, k);
-        k = if_else(xlelogeps, eve::mone, k);
+        k = if_else(xltminrange, eve::mone, k);
       }
       return k;
     }
@@ -112,7 +110,7 @@ namespace eve::detail
   }
 
   template<floating_real_value T>
-  EVE_FORCEINLINE constexpr T expm1_(EVE_SUPPORTS(cpu_), T const &x) noexcept
+  EVE_FORCEINLINE constexpr T expm1_(EVE_SUPPORTS(cpu_), T x) noexcept
   {
     return expm1(regular_type(), x);
   }
