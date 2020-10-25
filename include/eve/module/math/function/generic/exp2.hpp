@@ -55,12 +55,12 @@ namespace eve::detail
     if constexpr( has_native_abi_v<T> )
     {
       using elt_t     = element_type_t<T>;
-      auto minlogval = [](){
-        if constexpr(!eve::platform::supports_denormals || std::is_same_v < D, regular_type > ) return  minlog2(eve::as<T>());
-        else return minlog2denormal(eve::as<T>());
-      };
-      auto xltminlog2 = x <= minlogval();
-      auto xgemaxlog2 = x >= maxlog2(eve::as(x));
+//       auto minlogval = [](){
+//         if constexpr(!eve::platform::supports_denormals || std::is_same_v < D, regular_type > ) return  minlog2(eve::as<T>());
+//         else return minlog2denormal(eve::as<T>());
+//       };
+      auto xltminlog2 = x < eve::range_min<T>(D()(exp2)); //logval();
+      auto xgemaxlog2 = x > eve::range_max<T>(exp2);      //log2(eve::as(x));
       if constexpr( scalar_value<T> )
       {
         if(xgemaxlog2 ) return inf(eve::as(x));
