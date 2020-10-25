@@ -26,6 +26,7 @@ TTS_CASE_TPL("Check eve::exp properties", EVE_TYPE)
     auto reg = eve::exp;
     using v_t = eve::element_type_t<T>;
     TTS_ULP_EQUAL (reg(eve::prev(eve::range_min<T>(reg))), v_t(0), 0.5);
+    TTS_EXPECT(reg(eve::range_min<T>(reg)) >  v_t(0));
     TTS_ULP_EQUAL (reg(eve::range_min<T>(reg)), std::exp(eve::range_min<v_t>(reg)), 0.5);
     TTS_ULP_EQUAL (reg(eve::next(eve::range_max<T>(reg))), eve::inf(eve::as<v_t>()), 0.5);
     TTS_ULP_EQUAL (reg(eve::range_max<T>(reg)), std::exp(eve::range_max<v_t>(reg)), 0.5);
