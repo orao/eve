@@ -14,9 +14,9 @@
 #include <eve/constant/ieee_constant.hpp>
 #include <eve/constant/inf.hpp>
 #include <eve/constant/invlog10_2.hpp>
-#include <eve/constant/maxlog10.hpp>
-#include <eve/constant/minlog10.hpp>
-#include <eve/constant/minlog10denormal.hpp>
+// #include <eve/constant/maxlog10.hpp>
+// #include <eve/constant/minlog10.hpp>
+// #include <eve/constant/minlog10denormal.hpp>
 #include <eve/constant/zero.hpp>
 #include <eve/detail/abi.hpp>
 #include <eve/detail/apply_over.hpp>
@@ -46,23 +46,23 @@ namespace eve::detail
     if constexpr( has_native_abi_v<T> )
     {
       using elt_t         = element_type_t<T>;
-      auto minlogval = [](){
-        if constexpr((!eve::platform::supports_denormals) || std::is_same_v<D,regular_type> )
-        {
-          return  minlog10(eve::as<T>());
-        }
-        else
-        {
-          return minlog10denormal(eve::as<T>());
-        }
-      };
+//       auto minlogval = [](){
+//         if constexpr((!eve::platform::supports_denormals) || std::is_same_v<D,regular_type> )
+//         {
+//           return  minlog10(eve::as<T>());
+//         }
+//         else
+//         {
+//           return minlog10denormal(eve::as<T>());
+//         }
+//       };
       const T Log10_2hi   = Ieee_constant<T, 0x3e9a0000U, 0x3fd3440000000000ULL>();
       const T Log10_2lo   = Ieee_constant<T, 0x39826a14U, 0x3ed3509f79fef312ULL>();
-      auto    xltminlog10 = x <= minlogval();
-      auto    xgemaxlog10 = x >= maxlog10(eve::as(x));
+      auto    xltminlog10 = x < eve::range_min<T>(D()(exp10));
+      auto    xgtmaxlog10 = x > eve::range_max<T>(exp10);
       if constexpr( scalar_value<T> )
       {
-        if( xgemaxlog10 ) return inf(eve::as(x));
+        if( xgtmaxlog10 ) return inf(eve::as(x));
         if( xltminlog10 ) return zero(eve::as(x));
       }
       auto c = nearest(invlog10_2(eve::as<T>()) * x);
@@ -92,7 +92,7 @@ namespace eve::detail
       if constexpr( simd_value<T> )
       {
         z = if_else(xltminlog10, eve::zero, z);
-        z = if_else(xgemaxlog10, inf(eve::as(x)), z);
+        z = if_else(xgtmaxlog10, inf(eve::as(x)), z);
       }
       return z;
     }
