@@ -25,43 +25,10 @@
 #include <eve/function/prev.hpp>
 #include <eve/function/next.hpp>
 
-template <typename T,typename F> void detect_max(F func)
-{
-  using v_t =  eve::element_type_t<T>;
-  auto vmin = eve::range_max<T>(func)*v_t(0.1);
-  auto vmax = eve::range_max<T>(func)*v_t(10);
-  std::cout << vmin << " <= " << vmax << std::endl;
-  std::cout << func(vmin)<< std::endl;
-  std::cout << func(vmax)<< std::endl;
-//  if (vmin <  vmax) std::swap(vmin, vmax);
-  if(func(vmin) > 0 && func(vmax) == 0)
-  {
-    while(true)
-    {
-      auto v =  eve::average(vmax, vmin);
-      if (func(v) > 0) vmin = v;  else vmax = v;
-//         std::cout << "vmax " << vmax <<  std::endl;
-//         std::cout << "vmin " << vmin <<  std::endl;
-//         std::cout << "vmin > vmax   " << (vmin > vmax) <<  std::endl;
-      if(vmax <=  eve::next(vmin))
-      {
-        std::cout << "n " << std::hexfloat << eve::next(v) << " -> " << func(eve::next(v)) << " -> " << std::defaultfloat << std::setprecision(16) << eve::next(v) << std::endl;
-        std::cout << "v " << std::hexfloat << v << " -> " << func(v) <<                       " -> " << std::defaultfloat << std::setprecision(16) << v << std::endl;
-        std::cout << "p " << std::hexfloat << eve::prev(v) << " -> " << func(eve::prev(v)) << " -> " << std::defaultfloat << std::setprecision(16) << eve::prev(v) << std::endl;
-        break;
-      }
-    }
-  }
-  else
-    std::cout << "zut" << std::endl;
-}
-
-
 TTS_CASE_TPL("Check eve::expx2m properties", EVE_TYPE)
 {
   auto reg = eve::expx2m;
   using v_t = eve::element_type_t<T>;
-  detect_max<T>(reg);
   TTS_ULP_EQUAL (reg(eve::prev(eve::range_min<T>(reg))), eve::zero(eve::as<v_t>()), 0.5);
   TTS_EXPECT(reg(eve::range_min<T>(reg)) >  0 );
   TTS_ULP_EQUAL (reg(eve::next(eve::range_max<T>(reg))), eve::zero(eve::as<v_t>()), 0.5);
