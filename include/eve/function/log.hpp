@@ -12,10 +12,23 @@
 
 #include <eve/arch.hpp>
 #include <eve/detail/overload.hpp>
+#include <eve/function/pedantic.hpp>
+#include <eve/function/properties.hpp>
 
 namespace eve
 {
   EVE_MAKE_CALLABLE(log_, log);
+
+  namespace detail
+  {
+    // range_min
+    template<typename T> inline constexpr T range_max<tag::log_(T)> =
+      platform::supports_denormals
+      ? std::numeric_limits<T>::denorm_min()
+        : std::numeric_limits<T>::min();
+
+  }
+
 }
 
 #include <eve/module/math/function/generic/log.hpp>
@@ -23,4 +36,3 @@ namespace eve
 #if defined(EVE_HW_X86)
 #  include <eve/module/math/function/simd/x86/log.hpp>
 #endif
-
