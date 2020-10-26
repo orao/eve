@@ -49,8 +49,8 @@ namespace eve
   namespace detail
   {
     // range_max
-//     template<unsigned_value T> constexpr auto range_max<tag::exp10_(T)>  =  sizeof(element_type_t<T>)*8-1;
-//     template<signed_integral_value T> constexpr auto range_max<tag::exp10_(T)>  =  sizeof(element_type_t<T>)*8-2;
+    template<unsigned_value T> constexpr auto range_max<tag::exp10_(T)>  =  sizeof(element_type_t<T>)*8-1;
+    template<signed_integral_value T> constexpr auto range_max<tag::exp10_(T)>  =  sizeof(element_type_t<T>)*8-2;
 
     template<> inline constexpr auto range_max<tag::exp10_(float)>  =  0x1.330cf2p+5f;       //  38.38132095336914f;
     template<> inline constexpr auto range_max<tag::exp10_(double)> =  0x1.341aace35660fp+8; // 308.1042005620848;

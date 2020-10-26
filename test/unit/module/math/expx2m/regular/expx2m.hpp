@@ -8,11 +8,12 @@
   SPDX-License-Identifier: MIT
 **/
 //==================================================================================================
-#include <eve/function/expx2.hpp>
+#include <eve/function/expx2m.hpp>
 #include <eve/function/exp.hpp>
 #include <eve/constant/nan.hpp>
 #include <eve/constant/inf.hpp>
 #include <eve/constant/minf.hpp>
+#include <eve/constant/zero.hpp>
 #include <eve/concept/value.hpp>
 #include <eve/platform.hpp>
 
@@ -29,13 +30,16 @@ template <typename T,typename F> void detect_max(F func)
   using v_t =  eve::element_type_t<T>;
   auto vmin = eve::range_max<T>(func)*v_t(0.1);
   auto vmax = eve::range_max<T>(func)*v_t(10);
-  if (vmin > vmax) std::swap(vmin, vmax);
-  if(eve::is_finite(func(vmin)) && !eve::is_finite(func(vmax)))
+  std::cout << vmin << " <= " << vmax << std::endl;
+  std::cout << func(vmin)<< std::endl;
+  std::cout << func(vmax)<< std::endl;
+//  if (vmin <  vmax) std::swap(vmin, vmax);
+  if(func(vmin) > 0 && func(vmax) == 0)
   {
     while(true)
     {
       auto v =  eve::average(vmax, vmin);
-      if (eve::is_finite(func(v))) vmin = v;  else vmax = v;
+      if (func(v) > 0) vmin = v;  else vmax = v;
 //         std::cout << "vmax " << vmax <<  std::endl;
 //         std::cout << "vmin " << vmin <<  std::endl;
 //         std::cout << "vmin > vmax   " << (vmin > vmax) <<  std::endl;
@@ -53,33 +57,32 @@ template <typename T,typename F> void detect_max(F func)
 }
 
 
-TTS_CASE_TPL("Check eve::expx2 properties", EVE_TYPE)
+TTS_CASE_TPL("Check eve::expx2m properties", EVE_TYPE)
 {
-  auto reg = eve::expx2;
+  auto reg = eve::expx2m;
   using v_t = eve::element_type_t<T>;
   detect_max<T>(reg);
-  TTS_ULP_EQUAL (reg(eve::prev(eve::range_min<T>(reg))), eve::inf(eve::as<v_t>()), 0.5);
-  TTS_EXPECT(eve::is_finite(reg(eve::range_min<T>(reg))));
-  TTS_ULP_EQUAL (reg(eve::next(eve::range_max<T>(reg))), eve::inf(eve::as<v_t>()), 0.5);
-  TTS_EXPECT(eve::is_finite(reg(eve::range_max<T>(reg))));
+  TTS_ULP_EQUAL (reg(eve::prev(eve::range_min<T>(reg))), eve::zero(eve::as<v_t>()), 0.5);
+  TTS_EXPECT(reg(eve::range_min<T>(reg)) >  0 );
+  TTS_ULP_EQUAL (reg(eve::next(eve::range_max<T>(reg))), eve::zero(eve::as<v_t>()), 0.5);
+  TTS_EXPECT(reg(eve::range_max<T>(reg)) > 0);
 }
 
-TTS_CASE_TPL("Check eve::expx2 return type", EVE_TYPE)
+TTS_CASE_TPL("Check eve::expx2m return type", EVE_TYPE)
 {
-  TTS_EXPR_IS(eve::expx2(T()), T);
+  TTS_EXPR_IS(eve::expx2m(T()), T);
 }
 
-
-TTS_CASE_TPL("Check eve::expx2 behavior", EVE_TYPE)
+TTS_CASE_TPL("Check eve::expx2m behavior", EVE_TYPE)
 {
   using eve::as;
-  TTS_ULP_EQUAL (eve::expx2(T(1)), eve::exp(T(1)), 0.5);
-  TTS_IEEE_EQUAL(eve::expx2(T(0)), T(1));
-  TTS_IEEE_EQUAL(eve::expx2(T(4)), eve::exp(T(16)));
-  TTS_IEEE_EQUAL(eve::expx2(T(-4)),eve::exp(T(16)));
-  TTS_IEEE_EQUAL(eve::expx2(eve::nan(as<T>())) , eve::nan(as<T>()) );
-  TTS_IEEE_EQUAL(eve::expx2(eve::inf(as<T>())) , eve::inf(as<T>()) );
-  TTS_IEEE_EQUAL(eve::expx2(eve::minf(as<T>())), eve::inf(as<T>()) );
-  TTS_IEEE_EQUAL(eve::expx2(T(-0.)), T(1));
-  TTS_ULP_EQUAL (eve::expx2(T(-1)) , eve::exp(T(1)), 0.5);
+  TTS_ULP_EQUAL (eve::expx2m(T(1)), eve::exp(-T(1)), 0.5);
+  TTS_IEEE_EQUAL(eve::expx2m(T(0)), T(1));
+  TTS_IEEE_EQUAL(eve::expx2m(T(4)), eve::exp(-T(16)));
+  TTS_IEEE_EQUAL(eve::expx2m(T(-4)),eve::exp(-T(16)));
+  TTS_IEEE_EQUAL(eve::expx2m(eve::nan(as<T>())) , eve::nan(as<T>()) );
+  TTS_IEEE_EQUAL(eve::expx2m(eve::inf(as<T>())) , eve::zero(as<T>()) );
+  TTS_IEEE_EQUAL(eve::expx2m(eve::minf(as<T>())), eve::zero(as<T>()) );
+  TTS_IEEE_EQUAL(eve::expx2m(T(-0.)), T(1));
+  TTS_ULP_EQUAL (eve::expx2m(T(-1)) , eve::exp(-T(1)), 0.5);
 }

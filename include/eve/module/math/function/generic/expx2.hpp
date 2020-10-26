@@ -57,21 +57,24 @@ namespace eve::detail
       if constexpr(scalar_value<T> && eve::platform::supports_infinites)
         if (is_infinite(a0)) return inf(as<T>());
       T x =  eve::abs(a0);
-       const T Expx2c1 = Ieee_constant<T, 0x42000000U, 0x4060000000000000ull>();
-       const T Expx2c2 = Ieee_constant<T, 0x3d000000U, 0x3f80000000000000ull>();
-       /* Represent x as an exact multiple of 1/32 plus a residual.  */
-       T m = Expx2c1 * eve::floor(fma(Expx2c2, x, half(as<T>())));
-       x -= m;
-       /* x**2 = m**2 + 2mf + f**2 */
-       T u = sqr(m);
-       T u1 = fma(T(2) * m, x, sqr(x));
-       /* u is exact, u1 is small.  */
-       auto gtmxlg = is_not_less_equal(u+u1, maxlog(as<T>()));
-       if constexpr(scalar_value<T>)
-       {
-         if (gtmxlg) return inf(as<T>());
-         return eve::exp(u)*eve::exp(u1);
-       }
+      auto gtmxlg =  x > eve::range_max<T>(expx2);
+      if constexpr(eve::platform::supports_invalids && scalar_value<T>)
+      {
+        if (gtmxlg) return inf(as(x));
+      }
+      const T Expx2c1 = Ieee_constant<T, 0x42000000U, 0x4060000000000000ull>();
+      const T Expx2c2 = Ieee_constant<T, 0x3d000000U, 0x3f80000000000000ull>();
+      /* Represent x as an exact multiple of 1/32 plus a residual.  */
+      T m = Expx2c1 * eve::floor(fma(Expx2c2, x, half(as<T>())));
+      x -= m;
+      /* x**2 = m**2 + 2mf + f**2 */
+      T u = sqr(m);
+      T u1 = fma(T(2) * m, x, sqr(x));
+      /* u is exact, u1 is small.  */
+      if constexpr(scalar_value<T>)
+      {
+        return eve::exp(u)*eve::exp(u1);
+      }
       else if  constexpr(simd_value<T>)
       {
         T r = eve::if_else(gtmxlg,eve::inf(as<T>()), eve::exp(u)*eve::exp(u1));
