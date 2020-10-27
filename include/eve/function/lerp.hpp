@@ -15,7 +15,10 @@
 namespace eve
 {
   EVE_MAKE_CALLABLE(lerp_, lerp);
+  namespace detail
+  {
+    template<> inline constexpr auto supports_pedantic<tag::lerp_> = true;
+  }
 }
 
 #include <eve/module/core/function/generic/lerp.hpp>
-

@@ -16,6 +16,10 @@
 namespace eve
 {
   EVE_MAKE_CALLABLE(lgamma_, lgamma);
+  namespace detail
+  {
+    template<> inline constexpr auto supports_pedantic<tag::lgamma_> = true;
+  }
 }
 
 #include <eve/module/special/function/generic/lgamma.hpp>

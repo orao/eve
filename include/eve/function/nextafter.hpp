@@ -15,7 +15,10 @@
 namespace eve
 {
   EVE_MAKE_CALLABLE(nextafter_, nextafter);
+  namespace detail
+  {
+    template<> inline constexpr auto supports_pedantic<tag::nextafter_> = true;
+  }
 }
 
 #include <eve/module/core/function/generic/nextafter.hpp>
-

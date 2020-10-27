@@ -11,6 +11,8 @@
 #pragma once
 
 #include <eve/detail/overload.hpp>
+#include <eve/platform.hpp>
+#include <eve/function/properties.hpp>
 
 namespace eve
 {
