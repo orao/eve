@@ -15,7 +15,10 @@
 namespace eve
 {
   EVE_MAKE_CALLABLE(maxmag_, maxmag);
+  namespace detail
+  {
+    template<> inline constexpr auto supports_pedantic<tag::maxmag_> = true;
+  }
 }
 
 #include <eve/module/core/function/generic/maxmag.hpp>
-

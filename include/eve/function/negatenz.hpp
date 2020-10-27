@@ -15,7 +15,10 @@
 namespace eve
 {
   EVE_MAKE_CALLABLE(negatenz_, negatenz);
+  namespace detail
+  {
+    template<> inline constexpr auto supports_pedantic<tag::negatenz_> = true;
+  }
 }
 
 #include <eve/module/core/function/generic/negatenz.hpp>
-

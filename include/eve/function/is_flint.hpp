@@ -15,7 +15,10 @@
 namespace eve
 {
   EVE_MAKE_CALLABLE(is_flint_, is_flint);
+  namespace detail
+  {
+    template<> inline constexpr auto supports_pedantic<tag::is_flint_> = true;
+  }
 }
 
 #include <eve/module/core/function/generic/is_flint.hpp>
-

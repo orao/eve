@@ -15,7 +15,10 @@
 namespace eve
 {
   EVE_MAKE_CALLABLE(hypot_, hypot);
+  namespace detail
+  {
+    template<> inline constexpr auto supports_pedantic<tag::hypot_> = true;
+  }
 }
 
 #include <eve/module/core/function/generic/hypot.hpp>
-

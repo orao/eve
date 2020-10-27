@@ -15,6 +15,10 @@
 namespace eve
 {
   EVE_MAKE_CALLABLE(fnma_, fnma);
+  namespace detail
+  {
+    template<> inline constexpr auto supports_pedantic<tag::fnma_> = true;
+  }
 }
 
 #include <eve/arch.hpp>
@@ -27,4 +31,3 @@ namespace eve
 #if defined(EVE_HW_ARM)
 #  include <eve/module/core/function/simd/arm/neon/fnma.hpp>
 #endif
-

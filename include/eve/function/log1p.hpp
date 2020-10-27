@@ -22,6 +22,8 @@ namespace eve
      // range_min
      template<> inline constexpr auto range_min<tag::log1p_(float)>  = -0x1.fffffep-1f;
      template<> inline constexpr auto range_min<tag::log1p_(double)> = -0x1.fffffffffffffp-1;
+
+     template<> inline constexpr auto supports_pedantic<tag::log1p_> = true;
    }
 }
 

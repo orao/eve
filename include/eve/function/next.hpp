@@ -38,6 +38,10 @@ namespace eve
   }
 
   EVE_MAKE_CALLABLE(next_, next);
+  namespace detail
+  {
+    template<> inline constexpr auto supports_pedantic<tag::next_> = true;
+  }
 }
 
 #include <eve/module/core/function/generic/next.hpp>

@@ -15,7 +15,10 @@
 namespace eve
 {
   EVE_MAKE_CALLABLE(ifrexp_, ifrexp);
+  namespace detail
+  {
+    template<> inline constexpr auto supports_pedantic<tag::ifrexp_> = true;
+  }
 }
 
 #include <eve/module/core/function/generic/ifrexp.hpp>
-

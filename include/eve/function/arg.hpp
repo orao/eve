@@ -15,6 +15,10 @@
 namespace eve
 {
   EVE_MAKE_CALLABLE(arg_, arg);
+  namespace detail
+  {
+    template<> inline constexpr auto supports_pedantic<tag::arg_> = true;
+  }
 }
 
 #include <eve/module/core/function/generic/arg.hpp>

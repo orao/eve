@@ -36,6 +36,10 @@ namespace eve
   }
 
   EVE_MAKE_CALLABLE(ldexp_, ldexp);
+  namespace detail
+  {
+    template<> inline constexpr auto supports_pedantic<tag::ldexp_> = true;
+  }
 }
 
 #include <eve/module/core/function/generic/ldexp.hpp>

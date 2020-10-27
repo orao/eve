@@ -15,7 +15,10 @@
 namespace eve
 {
   EVE_MAKE_CALLABLE(minmag_, minmag);
+  namespace detail
+  {
+    template<> inline constexpr auto supports_pedantic<tag::minmag_> = true;
+  }
 }
 
 #include <eve/module/core/function/generic/minmag.hpp>
-

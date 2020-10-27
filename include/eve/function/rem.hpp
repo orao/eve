@@ -15,7 +15,10 @@
 namespace eve
 {
   EVE_MAKE_CALLABLE(rem_, rem);
+  namespace detail
+  {
+    template<> inline constexpr auto supports_pedantic<tag::rem_> = true;
+  }
 }
 
 #include <eve/module/core/function/generic/rem.hpp>
-

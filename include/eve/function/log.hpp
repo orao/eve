@@ -26,6 +26,7 @@ namespace eve
       ? std::numeric_limits<T>::denorm_min()
         : std::numeric_limits<T>::min();
 
+    template<> inline constexpr auto supports_pedantic<tag::log_> = true;
   }
 }
 

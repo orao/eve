@@ -15,7 +15,10 @@
 namespace eve
 {
   EVE_MAKE_CALLABLE(atan2pi_, atan2pi);
+  namespace detail
+  {
+    template<> inline constexpr auto supports_pedantic<tag::atan2pi_> = true;
+  }
 }
 
 #include <eve/module/math/function/generic/atan2pi.hpp>
-

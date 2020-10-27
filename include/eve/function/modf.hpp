@@ -15,7 +15,10 @@
 namespace eve
 {
   EVE_MAKE_CALLABLE(modf_, modf);
+  namespace detail
+  {
+    template<> inline constexpr auto supports_pedantic<tag::modf_> = true;
+  }
 }
 
 #include <eve/module/core/function/generic/modf.hpp>
-

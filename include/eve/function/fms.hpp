@@ -15,6 +15,10 @@
 namespace eve
 {
   EVE_MAKE_CALLABLE(fms_, fms);
+  namespace detail
+  {
+    template<> inline constexpr auto supports_pedantic<tag::fms_> = true;
+  }
 }
 
 #include <eve/arch.hpp>
@@ -27,4 +31,3 @@ namespace eve
 #if defined(EVE_HW_ARM)
 #  include <eve/module/core/function/simd/arm/neon/fms.hpp>
 #endif
-

@@ -15,6 +15,10 @@
 namespace eve
 {
   EVE_MAKE_CALLABLE(tgamma_, tgamma);
+  namespace detail
+  {
+    template<> inline constexpr auto supports_pedantic<tag::tgamma_> = true;
+  }
 }
 
 #include <eve/module/special/function/generic/tgamma.hpp>

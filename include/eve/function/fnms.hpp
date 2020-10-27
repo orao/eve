@@ -15,6 +15,10 @@
 namespace eve
 {
   EVE_MAKE_CALLABLE(fnms_, fnms);
+  namespace detail
+  {
+    template<> inline constexpr auto supports_pedantic<tag::fnms_> = true;
+  }
 }
 
 #include <eve/arch.hpp>

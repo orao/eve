@@ -15,7 +15,10 @@
 namespace eve
 {
   EVE_MAKE_CALLABLE(manhattan_, manhattan);
+  namespace detail
+  {
+    template<> inline constexpr auto supports_pedantic<tag::manhattan_> = true;
+  }
 }
 
 #include <eve/module/core/function/generic/manhattan.hpp>
-

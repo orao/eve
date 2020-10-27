@@ -15,7 +15,10 @@
 namespace eve
 {
   EVE_MAKE_CALLABLE(pow_abs_, pow_abs);
+  namespace detail
+  {
+    template<> inline constexpr auto supports_pedantic<tag::pow_abs_> = true;
+  }
 }
 
 #include <eve/module/math/function/generic/pow_abs.hpp>
-

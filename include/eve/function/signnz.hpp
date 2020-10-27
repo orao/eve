@@ -15,6 +15,10 @@
 namespace eve
 {
   EVE_MAKE_CALLABLE(signnz_, signnz);
+  namespace detail
+  {
+    template<> inline constexpr auto supports_pedantic<tag::signnz_> = true;
+  }
 }
 
 #include <eve/module/core/function/generic/signnz.hpp>

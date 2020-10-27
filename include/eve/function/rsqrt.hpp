@@ -15,6 +15,10 @@
 namespace eve
 {
   EVE_MAKE_CALLABLE(rsqrt_, rsqrt);
+  namespace detail
+  {
+    template<> inline constexpr auto supports_pedantic<tag::rsqrt_> = true;
+  }
 }
 
 #include <eve/arch.hpp>
@@ -31,4 +35,3 @@ namespace eve
 #if defined(EVE_HW_ARM)
 #  include <eve/module/core/function/simd/arm/neon/rsqrt.hpp>
 #endif
-

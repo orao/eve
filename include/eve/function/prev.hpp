@@ -38,6 +38,10 @@ namespace eve
   }
 
   EVE_MAKE_CALLABLE(prev_, prev);
+  namespace detail
+  {
+    template<> inline constexpr auto supports_pedantic<tag::prev_> = true;
+  }
 }
 
 #include <eve/module/core/function/generic/prev.hpp>

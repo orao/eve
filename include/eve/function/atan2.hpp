@@ -15,7 +15,10 @@
 namespace eve
 {
   EVE_MAKE_CALLABLE(atan2_, atan2);
+  namespace detail
+  {
+    template<> inline constexpr auto supports_pedantic<tag::atan2_> = true;
+  }
 }
 
 #include <eve/module/math/function/generic/atan2.hpp>
-
