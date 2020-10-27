@@ -33,6 +33,13 @@ namespace eve
   }
 
   EVE_MAKE_CALLABLE(sqrt_, sqrt);
+
+  namespace detail
+  {
+    // range_min
+    template<> inline constexpr auto range_min<tag::sqrt_(float)>  = 0.0f;
+    template<> inline constexpr auto range_min<tag::sqrt_(double)> = 0.0;
+  }
 }
 
 #include <eve/arch.hpp>

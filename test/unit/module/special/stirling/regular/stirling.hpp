@@ -10,10 +10,15 @@
 //==================================================================================================
 #include <eve/function/stirling.hpp>
 #include <eve/function/round.hpp>
+#include <eve/function/next.hpp>
+#include <eve/function/is_finite.hpp>
 #include <eve/constant/inf.hpp>
 #include <eve/constant/minf.hpp>
 #include <eve/constant/nan.hpp>
 #include <eve/platform.hpp>
+#include <eve/function/average.hpp>
+#include <eve/function/prev.hpp>
+#include <eve/function/next.hpp>
 
 TTS_CASE_TPL("Check eve::stirling return type", EVE_TYPE)
 {

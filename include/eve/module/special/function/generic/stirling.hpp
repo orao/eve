@@ -29,9 +29,8 @@
 
 namespace eve::detail
 {
-  template<floating_real_value T, decorator D>
-  EVE_FORCEINLINE constexpr T stirling_(EVE_SUPPORTS(cpu_), D const &, T a0) noexcept
-      requires(is_one_of<D>(types<regular_type, pedantic_type> {}))
+  template<floating_real_value T>
+  EVE_FORCEINLINE constexpr T stirling_(EVE_SUPPORTS(cpu_), T a0) noexcept
   {
     using elt_t = element_type_t<T>;
     if constexpr( has_native_abi_v<T> )
@@ -108,11 +107,4 @@ namespace eve::detail
     else
       return apply_over(stirling, a0);
   }
-
-  template<floating_real_value T>
-  EVE_FORCEINLINE constexpr T stirling_(EVE_SUPPORTS(cpu_), T const &x) noexcept
-  {
-    return stirling(regular_type(), x);
-  }
 }
-
