@@ -9,10 +9,13 @@
 **/
 //==================================================================================================
 #include <eve/function/log10.hpp>
+#include <eve/function/all.hpp>
+#include <eve/function/is_finite.hpp>
 #include <eve/constant/nan.hpp>
 #include <eve/constant/inf.hpp>
 #include <eve/constant/minf.hpp>
 #include <eve/constant/mindenormal.hpp>
+#include <eve/constant/smallestposval.hpp>
 #include <eve/platform.hpp>
 
 #include <cmath>
@@ -36,8 +39,10 @@ TTS_CASE_TPL("Check eve::log10 behavior", EVE_TYPE)
   if constexpr(eve::platform::supports_denormals)
   {
     TTS_IEEE_EQUAL(eve::log10(eve::mindenormal(eve::as<T>())), T(std::log10(eve::mindenormal(eve::as<v_t>()))));
+    TTS_EXPECT(eve::all(eve::is_finite(eve::log10(eve::mindenormal(eve::as<T>())))));
   }
 
+  TTS_EXPECT(eve::all(eve::is_finite(eve::log10(eve::smallestposval(eve::as<T>())))));
   TTS_IEEE_EQUAL(eve::log10(T(1)      ), T(0) );
   TTS_IEEE_EQUAL(eve::log10(T(10)     ), T(1) );
   TTS_IEEE_EQUAL(eve::log10(T(1000)   ), T(3) );

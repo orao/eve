@@ -9,6 +9,7 @@
 **/
 //==================================================================================================
 #include <eve/function/log1p.hpp>
+#include <eve/function/next.hpp>
 #include <eve/constant/mzero.hpp>
 #include <eve/constant/nan.hpp>
 #include <eve/constant/inf.hpp>
@@ -45,6 +46,7 @@ TTS_CASE_TPL("Check eve::log1p behavior", EVE_TYPE)
 
   auto epsi = eve::eps(eve::as<T>());
 
+  TTS_ULP_EQUAL(eve::log1p(eve::next(T(-1)))        , T(std::log1p(eve::next(v_t(-1))))          , 0.5 );
   TTS_ULP_EQUAL(eve::log1p(epsi)                    , epsi                    , 0.5 );
   TTS_ULP_EQUAL(eve::log1p(epsi)                    , epsi                    , 0.5 );
   TTS_ULP_EQUAL(eve::log1p(T(1))                    , eve::log_2(eve::as<T>())         , 0.5 );

@@ -40,10 +40,10 @@ TTS_CASE_TPL("Check eve::log behavior", EVE_TYPE)
   if constexpr(eve::platform::supports_denormals)
   {
     TTS_IEEE_EQUAL(eve::log(eve::mindenormal(eve::as<T>())), T(std::log(eve::mindenormal(eve::as<v_t>()))));
-    TTS_EXPECT(eve::all(eve::is_finite(eve::log(eve::smallestposval(eve::as<T>())))));
+    TTS_EXPECT(eve::all(eve::is_finite(eve::log(eve::mindenormal(eve::as<T>())))));
   }
 
-  TTS_EXPECT(eve::all(eve::is_finite(eve::log(eve::mindenormal(eve::as<T>())))));
+  TTS_EXPECT(eve::all(eve::is_finite(eve::log(eve::smallestposval(eve::as<T>())))));
   TTS_IEEE_EQUAL(eve::log(T( 1)), T( 0 )               );
   TTS_IEEE_EQUAL(eve::log(T( 2)), T(std::log(v_t( 2))) );
   TTS_IEEE_EQUAL(eve::log(T( 8)), T(std::log(v_t( 8))) );

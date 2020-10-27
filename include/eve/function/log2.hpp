@@ -12,10 +12,20 @@
 
 #include <eve/arch.hpp>
 #include <eve/detail/overload.hpp>
+#include <eve/function/properties.hpp>
+#include <limits>
 
 namespace eve
 {
   EVE_MAKE_CALLABLE(log2_, log2);
+  namespace detail
+  {
+    // range_min
+    template<typename T> inline constexpr T range_min<tag::log2_(T)> =
+      platform::supports_denormals
+      ? std::numeric_limits<T>::denorm_min()
+        : std::numeric_limits<T>::min();
+  }
 }
 
 #include <eve/module/math/function/generic/log2.hpp>

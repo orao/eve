@@ -9,10 +9,13 @@
 **/
 //==================================================================================================
 #include <eve/function/log2.hpp>
+#include <eve/function/all.hpp>
+#include <eve/function/is_finite.hpp>
 #include <eve/constant/nan.hpp>
 #include <eve/constant/inf.hpp>
 #include <eve/constant/minf.hpp>
 #include <eve/constant/mindenormal.hpp>
+#include <eve/constant/smallestposval.hpp>
 #include <eve/platform.hpp>
 
 #include <cmath>
@@ -36,8 +39,10 @@ TTS_CASE_TPL("Check eve::log2 behavior", EVE_TYPE)
   if constexpr(eve::platform::supports_denormals)
   {
     TTS_IEEE_EQUAL(eve::log2(eve::mindenormal(eve::as<T>())), T(std::log2(eve::mindenormal(eve::as<v_t>()))));
+    TTS_EXPECT(eve::all(eve::is_finite(eve::log2(eve::mindenormal(eve::as<T>())))));
   }
 
+  TTS_EXPECT(eve::all(eve::is_finite(eve::log2(eve::smallestposval(eve::as<T>())))));
   TTS_IEEE_EQUAL(eve::log2(T( 1)), T(0) );
   TTS_IEEE_EQUAL(eve::log2(T( 2)), T(1) );
   TTS_IEEE_EQUAL(eve::log2(T( 8)), T(3) );

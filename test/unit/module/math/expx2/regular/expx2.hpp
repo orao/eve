@@ -10,6 +10,8 @@
 //==================================================================================================
 #include <eve/function/expx2.hpp>
 #include <eve/function/exp.hpp>
+#include <eve/function/prev.hpp>
+#include <eve/function/next.hpp>
 #include <eve/constant/nan.hpp>
 #include <eve/constant/inf.hpp>
 #include <eve/constant/minf.hpp>
