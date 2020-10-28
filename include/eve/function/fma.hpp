@@ -18,6 +18,7 @@ namespace eve
   namespace detail
   {
     template<> inline constexpr auto supports_pedantic<tag::fma_> = true;
+    template<> inline constexpr auto supports_numeric<tag::fma_> = true;
   }
 }
 

@@ -20,6 +20,7 @@ namespace eve
   namespace detail
   {
     template<> inline constexpr auto supports_pedantic<tag::max_> = true;
+    template<> inline constexpr auto supports_numeric<tag::max_> = true;
   }
 }
 

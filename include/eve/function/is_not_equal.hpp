@@ -11,10 +11,15 @@
 #pragma once
 
 #include <eve/detail/overload.hpp>
+#include <eve/function/properties.hpp>
 
 namespace eve
 {
   EVE_MAKE_CALLABLE(is_not_equal_, is_not_equal);
+  namespace detail
+  {
+    template<> inline constexpr auto supports_numeric<tag::is_not_equal_> = true;
+  }
 }
 
 #include <eve/arch.hpp>

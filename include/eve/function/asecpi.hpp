@@ -15,7 +15,10 @@
 namespace eve
 {
   EVE_MAKE_CALLABLE(asecpi_, asecpi);
+  namespace detail
+  {
+    template<> inline constexpr auto supports_raw<tag::asecpi_> = true;
+  }
 }
 
 #include <eve/module/math/function/generic/asecpi.hpp>
-

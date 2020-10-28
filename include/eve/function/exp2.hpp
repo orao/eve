@@ -76,7 +76,7 @@ namespace eve
       : range_min<tag::exp2_(double)>;
 
     template<> inline constexpr auto supports_pedantic<tag::exp2_> = true;
-
+    template<> inline constexpr auto supports_raw<tag::exp2_> = true;
     template<typename T> inline constexpr T range_min<tag::exp2_(regular_type, T)> = range_min<tag::exp2_(T)>;
   }
 

@@ -18,6 +18,7 @@ namespace eve
   namespace detail
   {
     template<> inline constexpr auto supports_pedantic<tag::ifrexp_> = true;
+    template<> inline constexpr auto supports_raw<tag::ifrexp_> = true;
   }
 }
 

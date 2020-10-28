@@ -11,11 +11,17 @@
 #pragma once
 
 #include <eve/detail/overload.hpp>
+#include <eve/function/properties.hpp>
 
 namespace eve
 {
   EVE_MAKE_CALLABLE(asec_, asec);
+  namespace detail
+  {
+    template<> inline constexpr auto supports_raw<tag::asec_> = true;
+  }
 }
 
-#include <eve/module/math/function/generic/asec.hpp>
 
+
+#include <eve/module/math/function/generic/asec.hpp>

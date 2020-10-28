@@ -15,6 +15,10 @@
 namespace eve
 {
   EVE_MAKE_CALLABLE(is_equal_, is_equal);
+  namespace detail
+  {
+    template<> inline constexpr auto supports_numeric<tag::is_equal_> = true;
+  }
 }
 
 #include <eve/module/core/function/generic/is_equal.hpp>

@@ -28,9 +28,9 @@ namespace eve
     template<> inline constexpr auto range_max<tag::sqr_(std::uint16_t)> =  255;
     template<> inline constexpr auto range_max<tag::sqr_(std::uint32_t)> =  65535;
     template<> inline constexpr auto range_max<tag::sqr_(std::uint64_t)> =  4294967296ULL;
-
+    
     template<signed_value T>    inline constexpr auto range_max<tag::sqr_(T)>  =  -range_max<tag::sqr_(T)>;
-   }
+  }
 }
 
 #include <eve/module/core/function/generic/sqr.hpp>

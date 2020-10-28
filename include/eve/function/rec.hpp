@@ -11,6 +11,7 @@
 #pragma once
 
 #include <eve/detail/overload.hpp>
+#include <eve/function/properties.hpp>
 
 namespace eve
 {
@@ -18,6 +19,7 @@ namespace eve
   namespace detail
   {
     template<> inline constexpr auto supports_pedantic<tag::rec_> = true;
+    template<> inline constexpr auto supports_raw<tag::rec_> = true;
   }
 }
 

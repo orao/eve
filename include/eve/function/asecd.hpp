@@ -15,6 +15,10 @@
 namespace eve
 {
   EVE_MAKE_CALLABLE(asecd_, asecd);
+  namespace detail
+  {
+    template<> inline constexpr auto supports_raw<tag::asecd_> = true;
+  }
 }
 
 #include <eve/module/math/function/generic/asecd.hpp>

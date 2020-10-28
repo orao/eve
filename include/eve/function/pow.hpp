@@ -15,7 +15,10 @@
 namespace eve
 {
   EVE_MAKE_CALLABLE(pow_, pow);
+  namespace detail
+  {
+    template<> inline constexpr auto supports_raw<tag::pow_> = true;
+  }
 }
 
 #include <eve/module/math/function/generic/pow.hpp>
-

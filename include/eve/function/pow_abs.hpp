@@ -18,6 +18,7 @@ namespace eve
   namespace detail
   {
     template<> inline constexpr auto supports_pedantic<tag::pow_abs_> = true;
+    template<> inline constexpr auto supports_raw<tag::pow_abs_> = true;
   }
 }
 

@@ -23,7 +23,7 @@ namespace eve
     template<> inline constexpr auto range_min<tag::rsqrt_(float)>  = 0.0f;
     template<> inline constexpr auto range_min<tag::rsqrt_(double)> = 0.0;
     template<typename T> inline constexpr T range_min<tag::rsqrt_(pedantic_type, T)> = range_min<tag::rsqrt_(T)>;
-
+    template<> inline constexpr auto supports_raw<tag::rsqrt_> = true;
   }
 }
 

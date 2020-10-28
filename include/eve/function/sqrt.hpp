@@ -11,6 +11,7 @@
 #pragma once
 
 #include <eve/detail/overload.hpp>
+#include <eve/function/raw.hpp>
 #include <type_traits>
 
 namespace eve
@@ -39,6 +40,8 @@ namespace eve
     // range_min
     template<> inline constexpr auto range_min<tag::sqrt_(float)>  = 0.0f;
     template<> inline constexpr auto range_min<tag::sqrt_(double)> = 0.0;
+    template<typename T> inline constexpr auto range_min<tag::sqrt_(raw_type, T)> = range_min<tag::sqrt_(T)>;
+    template<> inline constexpr auto supports_raw<tag::sqrt_> = true;
   }
 }
 

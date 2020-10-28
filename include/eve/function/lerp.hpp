@@ -18,6 +18,8 @@ namespace eve
   namespace detail
   {
     template<> inline constexpr auto supports_pedantic<tag::lerp_> = true;
+    template<> inline constexpr auto supports_numeric<tag::lerp_> = true;
+    template<> inline constexpr auto supports_raw<tag::lerp_> = true;
   }
 }
 

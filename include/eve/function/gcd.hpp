@@ -15,6 +15,10 @@
 namespace eve
 {
   EVE_MAKE_CALLABLE(gcd_, gcd);
+  namespace detail
+  {
+    template<> inline constexpr auto supports_raw<tag::gcd_> = true;
+  }
 }
 
 #include <eve/module/combinatorial/function/generic/gcd.hpp>
