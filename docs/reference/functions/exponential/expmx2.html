@@ -1,0 +1,69 @@
+<!--
+  EVE -  Expressive Vector Engine
+  Copyright 2020 Joel FALCOU
+  Copyright 2020 Jean-Thierry LAPRESTE
+
+  Licensed under the MIT License <http://opensource.org/licenses/MIT>.
+  SPDX-License-Identifier: MIT
+ -->
+<meta charset="utf-8" lang="en">
+                       **Expressive Vector Engine**
+                           `eve::expmx2`
+<br>
+
+  (insert ../../../crumbs.html here)
+
+Synopsis
+====================================================================================================
+**Required header:** <script type="preformatted">`#include <eve/function/expmx2.hpp>`</script>
+
+<script type="preformatted">
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ c++
+namespace eve
+{
+  inline constexpr /*unspecified*/ expmx2 = /*unspecified*/;
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+</script>
+Function object representing the  computation of expmx2.
+
+Member functions
+====================================================================================================
+<script type="preformatted">
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ c++
+template< floating_real_value T> auto operator()( T x ) const noexcept;
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+</script>
+Performs $e^{-x^2}$.
+
+Parameters
+----------------------------------------------------------------------------------------------------
+`x`
+:   [floating real value](../../concepts.html#value).
+
+Return value
+----------------------------------------------------------------------------------------------------
+<span class="smallskip"></span>
+Returns the [element-wise](../../../glossary.html#elment-wise) exponential of the squared input,
+avoiding underflow as possible for large `x`
+In particular:
+
+   * If the element is $\pm0$, $1$ is returned
+   * If the element is $\pm\infty$, $0$ is returned
+   * If the element is a `NaN`, `NaN` is returned
+
+
+  (insert ../../src/expmx2.src.html here)
+
+  (insert ../../out/expmx2.out.html here)
+
+See Also
+====================================================================================================
+[exp](exp.html).
+
+<!-- End of Document -->
+<link rel="stylesheet" href="../../../eve.css">
+<!-- Markdeep: -->
+<script>markdeepOptions={tocStyle:'none'};</script>
+<script src="../../../markdeep.min.js"></script>
+<script src="https://casual-effects.com/markdeep/latest/markdeep.min.js?"></script>
