@@ -126,9 +126,10 @@ namespace eve::detail
     //==============================================================================================
     // Swizzle interface
     template<shuffle_pattern Pattern>
-    EVE_FORCEINLINE auto operator[](Pattern p) const noexcept requires(  Pattern::validate( static_size ) )
+    EVE_FORCEINLINE auto operator[](Pattern p) const noexcept
+    requires(  Pattern::validate( cardinal_v<Derived> ) )
     {
-      return detail::swizzle(EVE_CURRENT_API{}, *this, p);
+      return detail::swizzle(EVE_CURRENT_API{}, self(), p);
     }
 
     //==============================================================================================
