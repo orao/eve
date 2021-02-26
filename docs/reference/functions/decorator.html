@@ -64,6 +64,10 @@ parameters but with different computation scheme (e.g more precision, more speed
 :   makes the callable automatically converts its result to `std::uint64_t`
 [`eve::to_`](decorator/to.html)
 :   makes the callable automatically converts its result to an arbitrary type
+[`eve::promote`](decorator/promote.html)
+:   makes the callable automatically converts all its parameters to a type compatible to the first one before call, but insist on this being an upgrade operation.
+[`eve::narrow`](decorator/narrow.html)
+:   makes the callable automatically converts all its parameters to a type compatible to the first one before call, but insist on this being a downgrade operation.
 
 ### Rounding decorators
 
