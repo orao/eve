@@ -15,13 +15,14 @@
 namespace eve
 {
   //================================================================================================
-  // Function decorator - converting mode
-  struct converting_
+  // Function decorator - promote mode
+  struct promote_
   {
     template<typename Function>
     constexpr EVE_FORCEINLINE auto operator()(Function f) const noexcept
     {
       return [f] <value T0, value ...Ts>(T0 const& arg0, Ts const&... args)
+        requires (sizeof(element_type_t<common_compatible_t<Ts...>>) <= sizeof(element_type_t<T0>))
       {
         using c_t = common_compatible_t<Ts...>;
         using eltc_t = element_type_t<c_t>;
@@ -34,6 +35,6 @@ namespace eve
     }
   };
 
-  using converting_type = decorated<converting_()>;
-  inline constexpr converting_type const converting = {};
+  using promote_type = decorated<promote_()>;
+  inline constexpr promote_type const promote = {};
 }
