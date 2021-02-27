@@ -69,4 +69,17 @@ namespace eve::detail
       memcpy(ptr, (T const*)(&value), N::value * sizeof(T));
     }
   }
+
+  template< scalar_value T, typename N, x86_abi ABI
+          , relative_conditional_expr C
+          , simd_compatible_ptr<wide<T, N, ABI>> Ptr
+          >
+  EVE_FORCEINLINE void store_(EVE_SUPPORTS(sse2_),
+                              C const &cond,
+                              T const &value,
+                              Ptr ptr) noexcept
+  {
+    return store_(EVE_RETARGET(cpu_), cond, value, ptr);
+  }
+
 }

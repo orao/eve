@@ -95,7 +95,6 @@ namespace eve::detail
                               T const &value,
                               Ptr ptr) noexcept
   {
-    (void)cond;
          if constexpr ( C::is_complete && !C::is_inverted ) return;
     else if constexpr ( C::is_complete )                    store(value, ptr);
     else if constexpr ( !std::is_pointer_v<Ptr> )           store[cond](value, ptr.get());
