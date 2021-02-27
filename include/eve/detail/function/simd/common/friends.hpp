@@ -61,7 +61,10 @@ namespace eve::detail
   template<typename T, typename U, typename N>
   EVE_FORCEINLINE auto self_logand(logical<wide<T,N>> v, logical<wide<U,N>> w) noexcept
   {
-    if constexpr(sizeof(T) == sizeof(U))
+    using abi_t = typename logical<wide<T,N>>::abi_type;
+
+         if constexpr ( !abi_t::is_wide_logical ) return logical<wide<T,N>>(v.value & w.value);
+    else if constexpr ( !std::same_as<abi_t, eve::aggregated_> && sizeof(T) == sizeof(U) )
     {
       return bit_cast ( v.bits() & w.bits(), as(v) );
     }
@@ -75,7 +78,10 @@ namespace eve::detail
   template<typename T, typename U, typename N>
   EVE_FORCEINLINE auto self_logor(logical<wide<T,N>> v, logical<wide<U,N>> w) noexcept
   {
-    if constexpr(sizeof(T) == sizeof(U))
+    using abi_t = typename logical<wide<T,N>>::abi_type;
+
+         if constexpr ( !abi_t::is_wide_logical ) return logical<wide<T,N>>(v.value | w.value);
+    else if constexpr ( !std::same_as<abi_t, eve::aggregated_> && sizeof(T) == sizeof(U) )
     {
       return bit_cast ( v.bits() | w.bits(), as(v) );
     }
