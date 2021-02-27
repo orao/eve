@@ -8,6 +8,7 @@
 #pragma once
 #include <eve/memory/aligned_ptr.hpp>
 #include <eve/function/store.hpp>
+#include <eve/function/replace.hpp>
 #include <eve/wide.hpp>
 
 #include <array>
@@ -63,6 +64,7 @@ TTS_CASE_TPL("store for different alignment", EVE_TYPE )
   std::array<e_t, 256> data;
 
   const T what{[](int i, int) { return i; }};
+  const T zeroes{0};
 
   for (e_t* f =  data.begin();
             f != data.end() - EVE_CARDINAL + 1;
@@ -75,6 +77,10 @@ TTS_CASE_TPL("store for different alignment", EVE_TYPE )
         eve::aligned_ptr<e_t, static_cast<std::size_t>(A)> ptr{f};
         eve::store(what, ptr);
         TTS_EQUAL(T{f}, what);
+        eve::store(zeroes, ptr);
+        TTS_EQUAL(T{f}, zeroes);
+        eve::store[eve::ignore_none](what, ptr);
+        TTS_EQUAL(T{f}, what);
       }
     };
 
@@ -84,5 +90,72 @@ TTS_CASE_TPL("store for different alignment", EVE_TYPE )
     test(eve::lane<16>);
     test(eve::lane<8>);
     test(eve::lane<4>);
+  }
+}
+
+TTS_CASE_TPL("store[ignore]", EVE_TYPE )
+{
+  using e_t = EVE_VALUE;
+
+  const T what{[](int i, int) { return i; }};
+
+  // ignore_all should not write anything
+  {
+    e_t garbage;
+    eve::store[eve::ignore_all](what, &garbage + 5);
+  }
+
+  // write to one element (ASAN test).
+  {
+    e_t data;
+    data = 17;
+    eve::store[eve::ignore_first(T::static_size - 1)](what, &data - T::static_size + 1);
+    TTS_EQUAL(data, what.back());
+
+    eve::store[eve::ignore_last(T::static_size - 1)](what, &data);
+    TTS_EQUAL(data, what.front());
+
+    eve::store[eve::ignore_extrema_(0, T::static_size - 1)](what, &data);
+    TTS_EQUAL(data, what.front());
+  }
+
+  // ignore doesn't write garbarge values
+  {
+    std::array<e_t, 256> data;
+    const T filler{17};
+
+    auto run_one_case = [&](auto ptr, auto ignore)
+    {
+      eve::store(filler, ptr);
+      eve::store[ignore](what, ptr);
+      T actual(ptr);
+      T expected = eve::replace_ignored(what, ignore, filler);
+      TTS_EQUAL(actual, expected);
+    };
+
+    auto run_all_ignores = [&](auto ptr)
+    {
+      for (int i = 0; i != T::static_size + 1; ++i)
+      {
+        run_one_case(ptr, eve::ignore_first(i));
+        run_one_case(ptr, eve::ignore_last(i));
+
+        for (int j = T::static_size - i; j != -1; --j)
+        {
+          run_one_case(ptr, eve::ignore_extrema_(i, j));
+        }
+      }
+    };
+
+    for (e_t* f = data.begin(); f != data.end() - T::static_size; ++f)
+    {
+      run_all_ignores(f);
+
+      static constexpr std::ptrdiff_t alignment = sizeof(e_t) * T::static_size;
+
+      if (!eve::is_aligned<alignment>(f)) continue;
+
+      run_all_ignores(eve::aligned_ptr<e_t, alignment>(f));
+    }
   }
 }

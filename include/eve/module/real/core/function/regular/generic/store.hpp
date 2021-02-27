@@ -89,6 +89,26 @@ namespace eve::detail
     store(value.mask(), (typename logical<T>::mask_type*) ptr);
   }
 
+  template<simd_value T, relative_conditional_expr C, simd_compatible_ptr<T> Ptr>
+  EVE_FORCEINLINE void store_(EVE_SUPPORTS(cpu_),
+                              C const &cond,
+                              T const &value,
+                              Ptr ptr) noexcept
+  {
+    (void)cond;
+         if constexpr ( C::is_complete && !C::is_inverted ) return;
+    else if constexpr ( C::is_complete )                    store(value, ptr);
+    else if constexpr ( !std::is_pointer_v<Ptr> )           store[cond](value, ptr.get());
+    else //if constexpr ( has_emulated_abi_v<T> )
+    {
+        auto offset = cond.offset( as_<T>{} );
+        auto count = cond.count( as_<T>{} );
+        using e_t = element_type_t<T>;
+        auto* src   = (e_t*)(&value.storage());
+        std::memcpy((void*)(ptr + offset), (void*)(src + offset), sizeof(e_t) * count);
+    }
+  }
+
   template<real_scalar_value T, typename S, std::size_t A, typename ABI>
   EVE_FORCEINLINE void store_(EVE_SUPPORTS(cpu_),
                               logical<wide<T, S, ABI>> const &value,
